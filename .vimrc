@@ -1,45 +1,44 @@
-set nocompatible              " required
+set nocompatible              " be iMproved, required
 filetype off                  " required
-
-colorscheme solarized
-set relativenumber
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" line numbers:
-set number
-
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-
-" add all your plugins here (note older versions of Vundle
-" used Bundle instead of Plugin)
-
-" ...
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'vim-airline/vim-airline'
+" Plugin 'vim-airline/vim-airline-themes'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'w0rp/ale'
+Plugin 'altercation/vim-colors-solarized'
+" Plugin 'vim-syntastic/syntastic'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-" Show statusbar
-set laststatus=2
 
-let g:solarized_termtrans = 1
-set background=dark
-
-
-"split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" executing pathogen
-execute pathogen#infect()
-
+"Color Options
 syntax enable
+set background=dark
+let g:solarized_termtrans = 1
+colorscheme solarized
+
+set tabstop=4
+set shiftwidth=4
+set expandtab
+
+" Set line numbers
+set number
+set relativenumber
+
+" copies to the system level clipboard
+set clipboard=unnamedplus
+
+" remove whitespace on write of python files
+autocmd BufWritePre *.py :%s/\s\+$//e
+
+" syntastic python linter
+let g:syntastic_python_checkers = ['flake8']
