@@ -6,8 +6,10 @@
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/yasirdin/.oh-my-zsh"
 
-alias p='python3'
-alias g='git'
+alias v="vim"
+alias p="python3"
+alias g="git"
+alias t="tmux"
 
 # shortcuts to navigate
 bindkey "[D" backward-word
@@ -109,3 +111,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias config='/usr/bin/git --git-dir=/Users/yasirdin/.cfg/ --work-tree=/Users/yasirdin'
+export PATH="/Users/yasirdin/anaconda3/bin:$PATH"
+
+function cd_up() {
+  cd $(printf "%0.s../" $(seq 1 $1 ));
+}
+alias 'cd..'='cd_up'
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/yasirdin/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yasirdin/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc'; fi
