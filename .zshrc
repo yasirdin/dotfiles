@@ -4,7 +4,7 @@
 # tmux source ~/.tmux.conf
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/yasirdin/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 alias v="vim"
 alias p="python3"
