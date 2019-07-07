@@ -10,7 +10,6 @@ Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'w0rp/ale'
@@ -38,3 +37,4 @@ set clipboard=unnamedplus
 
 " python linters
 let b:ale_linters = ['flake8', 'mypy']
+let g:ale_python_flake8_options="--ignore=SC100,SC200"
