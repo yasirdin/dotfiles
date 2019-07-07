@@ -9,18 +9,15 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'vim-airline/vim-airline'
-" Plugin 'vim-airline/vim-airline-themes'
 Plugin 'ntpeters/vim-better-whitespace'
-" Plugin 'w0rp/ale'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'altercation/vim-colors-solarized'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'w0rp/ale'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
-
 
 "Color Options
 syntax enable
@@ -39,8 +36,5 @@ set relativenumber
 " copies to the system level clipboard
 set clipboard=unnamedplus
 
-" remove whitespace on write of python files
-autocmd BufWritePre *.py :%s/\s\+$//e
-
-" syntastic python linter
-let g:syntastic_python_checkers = ['flake8']
+" python linters
+let b:ale_linters = ['flake8', 'mypy']
