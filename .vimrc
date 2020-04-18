@@ -18,11 +18,12 @@ Plugin 'w0rp/ale'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-"Color Options
+" Color Options
 syntax enable
 set background=dark
 let g:solarized_termtrans = 1
 colorscheme solarized
+hi clear SignColumn
 
 set tabstop=4
 set shiftwidth=4

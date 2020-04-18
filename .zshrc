@@ -22,7 +22,7 @@ bindkey "^[e" end-of-line
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="eastwood"
+ZSH_THEME="minimal_improve"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -123,3 +123,6 @@ if [ -f '/Users/yasirdin/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yasird
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc'; fi
+
+# VS Code
+export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
