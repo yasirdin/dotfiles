@@ -3,9 +3,9 @@
 set -euo pipefail
 
 # Overwrite dotfiles in $HOME and soft symbolic link
-ln -sf ~/dotfiles/.vimrc ~/.vimrc
-ln -sf ~/dotfiles/.zshrc ~/.zshrc
-ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
+ln -sf $(pwd)/.vimrc ~/.vimrc
+ln -sf $(pwd)/.zshrc ~/.zshrc
+ln -sf $(pwd)/.tmux.conf ~/.tmux.conf
 
 # Install oh-my-zsh
 if [ ! -d ~/.oh-my-zsh ]; then
