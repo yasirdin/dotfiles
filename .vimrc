@@ -23,7 +23,6 @@ syntax enable
 set background=dark
 let g:solarized_termtrans = 1
 colorscheme solarized
-hi clear SignColumn
 
 set tabstop=4
 set shiftwidth=4
@@ -33,9 +32,6 @@ set expandtab
 set number
 set relativenumber
 
-" copies to the system level clipboard
-set clipboard=unnamedplus
-
-" python linters
+" Python linters
 let b:ale_linters = ['flake8', 'mypy']
 let g:ale_python_flake8_options="--ignore=SC100,SC200"
