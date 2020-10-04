@@ -13,7 +13,9 @@ if [ ! -d ~/.tmux/plugins/tpm ]; then
 fi
 
 # From: https://gist.github.com/mislav/5189704
-curl -fsSL https://gist.github.com/mislav/5189704/raw/install.sh | bash -e
+curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
+      -o /usr/local/bin/tmux-vim-select-pane
+chmod +x /usr/local/bin/tmux-vim-select-pane
 
 # Install oh-my-zsh
 if [ ! -d ~/.oh-my-zsh ]; then
