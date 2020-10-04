@@ -34,6 +34,9 @@ set expandtab
 set number
 set relativenumber
 
+" Set linebreak to stop breaking in middle of words
+set linebreak
+
 " Python linters
 let b:ale_linters = ['flake8', 'mypy']
 let g:ale_python_flake8_options="--ignore=SC100,SC200"
