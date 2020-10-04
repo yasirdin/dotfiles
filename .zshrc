@@ -118,11 +118,11 @@ function cd_up() {
 }
 alias 'cd..'='cd_up'
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/yasirdin/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yasirdin/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/google-cloud-sdk/completion.zsh.inc'; fi
-
 # VS Code
 export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yasirdin/Desktop/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
