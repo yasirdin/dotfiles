@@ -25,6 +25,7 @@ syntax enable
 set background=dark
 let g:solarized_termtrans = 1
 colorscheme solarized
+highlight clear SignColumn
 
 set tabstop=4
 set shiftwidth=4
