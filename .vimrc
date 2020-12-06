@@ -33,7 +33,6 @@ set expandtab
 
 " Set line numbers
 set number
-set relativenumber
 
 " Set linebreak to stop breaking in middle of words
 set linebreak
