@@ -6,6 +6,7 @@ set -euo pipefail
 ln -sf $(pwd)/.vimrc ~/.vimrc
 ln -sf $(pwd)/.zshrc ~/.zshrc
 ln -sf $(pwd)/.tmux.conf ~/.tmux.conf
+ln -sf $(pwd)/.muttrc ~/.muttrc
 
 # Install Tmux Plugin Manager (TPM)
 if [ ! -d ~/.tmux/plugins/tpm ]; then
