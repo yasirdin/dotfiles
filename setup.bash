@@ -28,4 +28,8 @@ if [ ! -d ~/.vim/bundle/Vundle.vim ]; then
 fi
 vim +PluginInstall +qall
 
+# Python linters
+python3 -m pip install --upgrade pip
+python3 -m pip install mypy flake8
+
 echo "Setup complete!"
