@@ -38,6 +38,9 @@ set number
 " Set linebreak to stop breaking in middle of words
 set linebreak
 
+" No swap file
+set noswapfile
+
 " Python linters
 let b:ale_linters = ['flake8', 'mypy']
 let g:ale_python_flake8_options="--ignore=SC100,SC200"
