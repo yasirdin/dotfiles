@@ -16,9 +16,9 @@ fi
 # Homebrew
 brew update
 brew upgrade
-# Fuzzy finder
-brew install fzf
+brew install fzf  # Fuzzy finder
 $(brew --prefix)/opt/fzf/install  # Install useful keybindings and fuzzy completion
+brew install ripgrep
 
 # From: https://gist.github.com/mislav/5189704
 curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
