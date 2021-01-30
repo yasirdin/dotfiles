@@ -25,10 +25,12 @@ call vundle#end()            " required
 filetype plugin indent on    " required
 
 " Color Options
+" For altercation/vim-colors-solarized plugin
 syntax enable
 set background=dark
-let g:solarized_termtrans = 1
 colorscheme solarized
+" To prevent grey in gutter. This, for some reason, must come after the
+" color settings applied above.
 highlight clear SignColumn
 
 set tabstop=4
