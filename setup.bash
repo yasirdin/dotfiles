@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: Replace this script with Makefile
+
 set -euo pipefail
 
 # Overwrite dotfiles in $HOME and soft symbolic link
@@ -37,6 +39,7 @@ fi
 vim +PluginInstall +qall
 
 # Python linters
+python3 --version
 python3 -m pip install --user --upgrade pip
 python3 -m pip install --user mypy flake8
 
