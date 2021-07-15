@@ -16,12 +16,25 @@ Plugin 'w0rp/ale'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'preservim/nerdtree'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'airblade/vim-rooter'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
+Plugin 'hashivim/vim-terraform'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+" NERDTree
+nnoremap <silent> <C-n> :NERDTreeToggle <CR>
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Fzf
+nnoremap <silent> <C-p> :Files <CR>
+nnoremap <silent> <C-g> :GFiles <CR>
+nnoremap <silent> <C-p> :Files <CR>
+nnoremap <C-f> :Rg!
 
 " Color Options
 " For altercation/vim-colors-solarized plugin
