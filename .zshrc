@@ -128,3 +128,6 @@ if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/User
 if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/terraform terraform

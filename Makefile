@@ -17,7 +17,11 @@ brew-update:
 	brew update
 	brew upgrade
 
-brew-installs: brew-update
+brew-install-terraform:
+	brew tap hashicorp/tap
+	brew install hashicorp/tap/terraform
+
+brew-installs: brew-update brew-install-terraform
 	brew install fzf
 	$(shell brew --prefix)/opt/fzf/install --all
 	brew install ripgrep
