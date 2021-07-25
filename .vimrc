@@ -29,6 +29,9 @@ filetype plugin indent on    " required
 nnoremap <silent> <C-n> :NERDTreeToggle <CR>
 " Exit Vim if NERDTree is the only window remaining in the only tab.
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" https://github.com/christoomey/vim-tmux-navigator/issues/83#issuecomment-141822445
+let g:NERDTreeMapJumpNextSibling = '<Nop>'
+let g:NERDTreeMapJumpPrevSibling = '<Nop>'
 
 " Fzf
 nnoremap <silent> <C-p> :Files <CR>
