@@ -1,3 +1,4 @@
+.PHONY: all
 all: symlink install-tmux brew-installs tmux-vim-select-pane install-oh-my-zsh install-vundle-vim-plugins install-python-linters
 
 # Overwrite dotfiles in $HOME and soft symbolic link
@@ -6,6 +7,7 @@ symlink:
 	ln -sf $(shell pwd)/.zshrc ~/.zshrc
 	ln -sf $(shell pwd)/.tmux.conf ~/.tmux.conf
 	ln -sf $(shell pwd)/.muttrc ~/.muttrc
+	ln -sf $(shell pwd)/alacritty.yml ~/.config/alacritty/alacritty.yml
 
 install-tmux:
 	# Install Tmux Plugin Manager (TPM)
@@ -21,10 +23,15 @@ brew-install-terraform:
 	brew tap hashicorp/tap
 	brew install hashicorp/tap/terraform
 
-brew-installs: brew-update brew-install-terraform
+brew-install-alacritty:
+	brew install --cask alacritty
+
+brew-install-ripgrep-fzf:
 	brew install fzf
 	$(shell brew --prefix)/opt/fzf/install --all
 	brew install ripgrep
+
+brew-installs: brew-update brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf
 
 tmux-vim-select-pane:
 	curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
