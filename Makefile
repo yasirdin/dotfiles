@@ -53,3 +53,7 @@ install-python-linters:
 	python3 --version
 	python3 -m pip install --user --upgrade pip
 	python3 -m pip install --user mypy flake8
+
+turn-off-macos-dock-bounce:
+	defaults write com.apple.dock no-bouncing -bool TRUE
+	killall Dock
