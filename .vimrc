@@ -32,6 +32,9 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 " https://github.com/christoomey/vim-tmux-navigator/issues/83#issuecomment-141822445
 let g:NERDTreeMapJumpNextSibling = '<Nop>'
 let g:NERDTreeMapJumpPrevSibling = '<Nop>'
+" Auto refresh when focus
+autocmd BufEnter NERD_tree_* | execute 'normal R'
+
 
 " Fzf
 nnoremap <silent> <C-p> :Files <CR>
