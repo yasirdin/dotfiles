@@ -68,4 +68,6 @@ set noswapfile
 let b:ale_linters = ['flake8', 'mypy', 'terraform']
 let g:ale_python_flake8_options="--ignore=SC100,SC200"
 
-:set backspace=indent,eol,start
+set backspace=indent,eol,start
+
+set mouse=a
