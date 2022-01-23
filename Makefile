@@ -57,3 +57,6 @@ install-python-linters:
 turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
 	killall Dock
+
+install-node-js:
+	curl -sL install-node.vercel.app/lts | bash
