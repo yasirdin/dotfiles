@@ -1,5 +1,5 @@
 .PHONY: all
-all: symlink install-tmux brew-installs tmux-vim-select-pane install-oh-my-zsh install-vundle-vim-plugins install-python-linters
+all: symlink install-tmux brew-installs tmux-vim-select-pane install-oh-my-zsh install-node-js install-nvim-plugins install-python-linters
 
 # Overwrite dotfiles in $HOME and soft symbolic link
 symlink:
@@ -31,7 +31,10 @@ brew-install-ripgrep-fzf:
 	$(shell brew --prefix)/opt/fzf/install --all
 	brew install ripgrep
 
-brew-installs: brew-update brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf
+brew-install-neovim:
+	brew install neovim
+
+brew-installs: brew-update brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-neovim
 
 tmux-vim-select-pane:
 	curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
@@ -43,11 +46,8 @@ install-oh-my-zsh:
 		sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"; \
 	fi
 
-install-vundle-vim-plugins:
-	if [ ! -d ~/.vim/bundle/Vundle.vim ]; then \
-		git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim; \
-	fi
-	vim +PluginInstall +qall
+install-nvim-plugins:
+	nvim +PluginInstall +qall
 
 install-python-linters:
 	python3 --version
