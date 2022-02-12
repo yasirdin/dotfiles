@@ -6,7 +6,9 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-alias v="vim"
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
 alias p="python3"
 alias g="git"
 alias t="tmux"
