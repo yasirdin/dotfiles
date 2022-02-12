@@ -35,7 +35,10 @@ brew-install-ripgrep-fzf:
 brew-install-nvim:
 	brew install nvim
 
-brew-installs: brew-update brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-nvim
+brew-install-fonts:
+	brew install --cask font-iosevka-nerd-font
+
+brew-installs: brew-update brew-install-fonts brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-nvim
 
 tmux-vim-select-pane:
 	curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
