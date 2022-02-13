@@ -19,6 +19,13 @@ return require('packer').startup(function(use)
   }
 
   use {
+    'hrsh7th/nvim-cmp',
+    'hrsh7th/cmp-nvim-lsp',
+    'saadparwaiz1/cmp_luasnip',
+    'L3MON4D3/LuaSnip',
+  }
+
+  use {
     'numToStr/Navigator.nvim',
     config = function()
         require('Navigator').setup()
@@ -29,4 +36,6 @@ return require('packer').startup(function(use)
     'nvim-telescope/telescope.nvim',
     requires = { {'nvim-lua/plenary.nvim'} }
   }
+
+  use 'ntpeters/vim-better-whitespace'
 end)

@@ -62,6 +62,12 @@ install-python-linters:
 	python3 -m pip install --user --upgrade pip
 	python3 -m pip install --user mypy flake8
 
+# Installation location has to be in $PATH for nvim LSP to access
+install-python-lsps:
+	python3 -m pip install --user python-lsp-server
+	python3 -m pip install --user python-lsp-black
+	python3 -m pip install --user pyls-flake8
+
 turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
 	killall Dock

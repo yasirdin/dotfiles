@@ -133,3 +133,6 @@ if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . 
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
+
+# cd to repository root
+alias rr='cd $(git rev-parse --show-toplevel)'

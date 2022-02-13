@@ -25,4 +25,5 @@ for _, server_name in pairs(servers) do
     end
 end
 
--- TODO: Add other servers not available using lsp_installer
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.pylsp.setup{}
