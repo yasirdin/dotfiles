@@ -38,4 +38,11 @@ return require('packer').startup(function(use)
   }
 
   use 'ntpeters/vim-better-whitespace'
+
+  use {
+    'terrortylor/nvim-comment',
+    config = function ()
+       require('nvim_comment').setup({line_mapping = "<leader>cl", operator_mapping = "<leader>c"})
+    end
+  }
 end)
