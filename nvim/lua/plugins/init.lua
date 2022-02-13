@@ -1,4 +1,4 @@
-return require('packer').startup(function()
+return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use 'airblade/vim-gitgutter'
@@ -11,5 +11,17 @@ return require('packer').startup(function()
       'kyazdani42/nvim-web-devicons',
     },
     config = function() require'nvim-tree'.setup {} end
+  }
+
+  use {
+    'neovim/nvim-lspconfig',
+    'williamboman/nvim-lsp-installer',
+  }
+
+  use {
+    'numToStr/Navigator.nvim',
+    config = function()
+        require('Navigator').setup()
+    end
   }
 end)
