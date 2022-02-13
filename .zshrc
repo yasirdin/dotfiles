@@ -6,7 +6,9 @@
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-alias v="vim"
+alias v="nvim"
+alias vi="nvim"
+alias vim="nvim"
 alias p="python3"
 alias g="git"
 alias t="tmux"
@@ -131,3 +133,6 @@ if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . 
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
+
+# cd to repository root
+alias rr='cd $(git rev-parse --show-toplevel)'
