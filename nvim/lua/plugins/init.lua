@@ -24,4 +24,9 @@ return require('packer').startup(function(use)
         require('Navigator').setup()
     end
   }
+
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
 end)

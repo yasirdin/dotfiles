@@ -3,6 +3,7 @@ local lsp_installer_servers = require('nvim-lsp-installer.servers')
 local servers = {
     "pyright",
     "sumneko_lua",
+    "bashls",
 }
 
 -- Loop through the servers listed above and set them up. If a server is
@@ -23,3 +24,5 @@ for _, server_name in pairs(servers) do
         end
     end
 end
+
+-- TODO: Add other servers not available using lsp_installer
