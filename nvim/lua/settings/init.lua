@@ -21,3 +21,5 @@ set.swapfile = false
 
 set.mouse = 'a'
 set.termguicolors = true
+
+set.linebreak = true
