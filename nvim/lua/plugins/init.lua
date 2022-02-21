@@ -45,4 +45,8 @@ return require('packer').startup(function(use)
        require('nvim_comment').setup({line_mapping = "<leader>cl", operator_mapping = "<leader>c"})
     end
   }
+
+  use "numToStr/FTerm.nvim"
+
+  use 'preservim/vim-markdown'
 end)
