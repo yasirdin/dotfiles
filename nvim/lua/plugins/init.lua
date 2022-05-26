@@ -49,4 +49,6 @@ return require('packer').startup(function(use)
   use "numToStr/FTerm.nvim"
 
   use 'preservim/vim-markdown'
+
+  use "ellisonleao/gruvbox.nvim"
 end)
