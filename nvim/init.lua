@@ -1,6 +1,6 @@
 require('settings')
 require('plugins')
-require('colorscheme.solarized')
+require('colorscheme.gruvbox')
 require('nvim-tree-config')
 require('keymaps')
 require('lsp')
