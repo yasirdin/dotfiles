@@ -10,7 +10,6 @@
 # to the user's home directory starting with `~/`.
 #import:
 #  - /path/to/alacritty.yml
-
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
@@ -32,7 +31,6 @@ window:
   #dimensions:
   #  columns: 0
   #  lines: 0
-
   # Window position (changes require restart)
   #
   # Specified in number of pixels.
@@ -40,7 +38,6 @@ window:
   #position:
   #  x: 0
   #  y: 0
-
   # Window padding (changes require restart)
   #
   # Blank space added around the window in pixels. This padding is scaled
@@ -62,7 +59,6 @@ window:
   #     - transparent: Title bar, transparent background and title bar buttons
   #     - buttonless: Title bar, transparent background and no title bar buttons
   decorations: buttonless
-
   # Startup Mode (changes require restart)
   #
   # Values for `startup_mode`:
@@ -73,31 +69,25 @@ window:
   # Values for `startup_mode` (macOS only):
   #   - SimpleFullscreen
   #startup_mode: Windowed
-
   # Window title
   #title: Alacritty
-
   # Allow terminal applications to change Alacritty's window title.
   #dynamic_title: true
-
   # Window class (Linux/BSD only):
   #class:
-    # Application instance name
-    #instance: Alacritty
-    # General application class
-    #general: Alacritty
-
+  # Application instance name
+  #instance: Alacritty
+  # General application class
+  #general: Alacritty
   # GTK theme variant (Linux/BSD only)
   #
   # Override the variant of the GTK theme. Commonly supported values are `dark`
   # and `light`. Set this to `None` to use the default theme variant.
   #gtk_theme_variant: None
-
-#scrolling:
+  #scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
   #history: 10000
-
   # Scrolling distance multiplier.
   #multiplier: 3
 
@@ -137,74 +127,69 @@ font:
 
     # The `style` can be specified to pick a specific face.
     style: Italic
-
-  # Bold italic font face
-  #bold_italic:
+    # Bold italic font face
+    #bold_italic:
     # Font family
     #
     # If the bold italic family is not specified, it will fall back to the
     # value specified for the normal font.
     #family: monospace
-
     # The `style` can be specified to pick a specific face.
     #style: Bold Italic
 
   # Point size
   #size: 11.0
-
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
   offset:
-  #  x: 0
+    #  x: 0
     y: 5
-
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
   # right, increasing `y` moves the glyph upward.
   #glyph_offset:
   #  x: 0
   #  y: 0
-
   # Thin stroke font rendering (macOS only)
   #
   # Thin strokes are suitable for retina displays, but for non-retina screens
   # it is recommended to set `use_thin_strokes` to `false`.
   #use_thin_strokes: true
-
 # If `true`, bold text is drawn using the bright color variants.
 #draw_bold_text_with_bright_colors: false
-
-# Colors: Gruvbox
 colors:
   # Default colors
   primary:
-    # hard contrast: background = '0x1d2021'
-    background: '0x282828'
-    # soft contrast: background = '0x32302f'
-    foreground: '0xebdbb2'
+    background: '#002b36' # base03
+    foreground: '#839496' # base0
+
+  # Cursor colors
+  cursor:
+    text: '#002b36' # base03
+    cursor: '#839496' # base0
 
   # Normal colors
   normal:
-    black:   '0x282828'
-    red:     '0xcc241d'
-    green:   '0x98971a'
-    yellow:  '0xd79921'
-    blue:    '0x458588'
-    magenta: '0xb16286'
-    cyan:    '0x689d6a'
-    white:   '0xa89984'
+    black: '#073642' # base02
+    red: '#dc322f' # red
+    green: '#859900' # green
+    yellow: '#b58900' # yellow
+    blue: '#268bd2' # blue
+    magenta: '#d33682' # magenta
+    cyan: '#2aa198' # cyan
+    white: '#eee8d5' # base2
 
   # Bright colors
   bright:
-    black:   '0x928374'
-    red:     '0xfb4934'
-    green:   '0xb8bb26'
-    yellow:  '0xfabd2f'
-    blue:    '0x83a598'
-    magenta: '0xd3869b'
-    cyan:    '0x8ec07c'
-    white:   '0xebdbb2'
+    black: '#002b36' # base03
+    red: '#cb4b16' # orange
+    green: '#586e75' # base01
+    yellow: '#657b83' # base00
+    blue: '#839496' # base0
+    magenta: '#6c71c4' # violet
+    cyan: '#93a1a1' # base1
+    white: '#fdf6e3' # base3
 
 # Bell
 #
@@ -226,14 +211,11 @@ bell:
   #   - EaseOutCirc
   #   - Linear
   #animation: EaseOutExpo
-
   # Duration of the visual bell flash in milliseconds. A `duration` of `0` will
   # disable the visual bell animation.
   duration: 0
-
   # Visual bell animation color.
   #color: '#ffffff'
-
   # Bell Command
   #
   # This program is executed whenever the bell is rung.
@@ -246,41 +228,36 @@ bell:
   #     args: ["Hello, World!"]
   #
   #command: None
-
-# Background opacity
-#
-# Window opacity as a floating point number from `0.0` to `1.0`.
-# The value `0.0` is completely transparent and `1.0` is opaque.
-#background_opacity: 1.0
-
-#selection:
+  # Background opacity
+  #
+  # Window opacity as a floating point number from `0.0` to `1.0`.
+  # The value `0.0` is completely transparent and `1.0` is opaque.
+  #background_opacity: 1.0
+  #selection:
   # This string contains all characters that are used as separators for
   # "semantic words" in Alacritty.
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
-
   # When set to `true`, selected text will be copied to the primary clipboard.
   #save_to_clipboard: false
-
-#cursor:
+cursor:
   # Cursor style
-  #style:
-    # Cursor shape
-    #
-    # Values for `shape`:
-    #   - ▇ Block
-    #   - _ Underline
-    #   - | Beam
-    #shape: Block
-
-    # Cursor blinking state
-    #
-    # Values for `blinking`:
-    #   - Never: Prevent the cursor from ever blinking
-    #   - Off: Disable blinking by default
-    #   - On: Enable blinking by default
-    #   - Always: Force the cursor to always blink
-    #blinking: Never
-
+  style:
+  # Cursor shape
+  #
+  # Values for `shape`:
+  #   - ▇ Block
+  #   - _ Underline
+  #   - | Beam
+  #shape: Block
+  # Cursor blinking state
+  #
+  # Values for `blinking`:
+  #   - Never: Prevent the cursor from ever blinking
+  #   - Off: Disable blinking by default
+  #   - On: Enable blinking by default
+  #   - Always: Force the cursor to always blink
+    blinking: Always
+    blink_interval: 100
   # Vi mode cursor style
   #
   # If the vi mode cursor style is `None` or not specified, it will fall back to
@@ -288,46 +265,38 @@ bell:
   #
   # See `cursor.style` for available options.
   #vi_mode_style: None
-
   # Cursor blinking interval in milliseconds.
   #blink_interval: 750
-
   # If this is `true`, the cursor will be rendered as a hollow box when the
   # window is not focused.
   #unfocused_hollow: true
-
   # Thickness of the cursor relative to the cell width as floating point number
   # from `0.0` to `1.0`.
   #thickness: 0.15
-
-# Live config reload (changes require restart)
-#live_config_reload: true
-
-# Shell
-#
-# You can set `shell.program` to the path of your favorite shell, e.g.
-# `/bin/fish`. Entries in `shell.args` are passed unmodified as arguments to the
-# shell.
-#
-# Default:
-#   - (macOS) /bin/bash --login
-#   - (Linux/BSD) user login shell
-#   - (Windows) powershell
-#shell:
-#  program: /bin/bash
-#  args:
-#    - --login
-
-# Startup directory
-#
-# Directory the shell is started in. If this is unset, or `None`, the working
-# directory of the parent process will be used.
-#working_directory: None
-
-# Send ESC (\x1b) before characters when alt is pressed.
-#alt_send_esc: true
-
-#mouse:
+  # Live config reload (changes require restart)
+  #live_config_reload: true
+  # Shell
+  #
+  # You can set `shell.program` to the path of your favorite shell, e.g.
+  # `/bin/fish`. Entries in `shell.args` are passed unmodified as arguments to the
+  # shell.
+  #
+  # Default:
+  #   - (macOS) /bin/bash --login
+  #   - (Linux/BSD) user login shell
+  #   - (Windows) powershell
+  #shell:
+  #  program: /bin/bash
+  #  args:
+  #    - --login
+  # Startup directory
+  #
+  # Directory the shell is started in. If this is unset, or `None`, the working
+  # directory of the parent process will be used.
+  #working_directory: None
+  # Send ESC (\x1b) before characters when alt is pressed.
+  #alt_send_esc: true
+  #mouse:
   # Click settings
   #
   # The `double_click` and `triple_click` settings control the time
@@ -335,18 +304,15 @@ bell:
   # or triple click.
   #double_click: { threshold: 300 }
   #triple_click: { threshold: 300 }
-
   # If this is `true`, the cursor is temporarily hidden when typing.
   #hide_when_typing: false
-
-# Regex hints
-#
-# Terminal hints can be used to find text in the visible part of the terminal
-# and pipe it to other applications.
-#hints:
+  # Regex hints
+  #
+  # Terminal hints can be used to find text in the visible part of the terminal
+  # and pipe it to other applications.
+  #hints:
   # Keys used for the hint labels.
   #alphabet: "jfkdls;ahgurieowpq"
-
   # List with all available hints
   #
   # Each hint must have a `regex` and either an `action` or a `command` field.
@@ -408,7 +374,6 @@ bell:
 # - `mods` (see key bindings)
 #mouse_bindings:
 #  - { mouse: Middle, action: PasteSelection }
-
 # Key bindings
 #
 # Key bindings are specified as a list of objects. For example, this is the
@@ -622,7 +587,6 @@ key_bindings:
   #- { key: PageDown,  mods: Shift,   mode: ~Alt,        action: ScrollPageDown }
   #- { key: Home,      mods: Shift,   mode: ~Alt,        action: ScrollToTop,   }
   #- { key: End,       mods: Shift,   mode: ~Alt,        action: ScrollToBottom }
-
   # Vi Mode
   #- { key: Space,  mods: Shift|Control, mode: ~Search,    action: ToggleViMode            }
   #- { key: Space,  mods: Shift|Control, mode: Vi|~Search, action: ScrollToBottom          }
@@ -671,7 +635,6 @@ key_bindings:
   #- { key: Slash,  mods: Shift,         mode: Vi|~Search, action: SearchBackward          }
   #- { key: N,                           mode: Vi|~Search, action: SearchNext              }
   #- { key: N,      mods: Shift,         mode: Vi|~Search, action: SearchPrevious          }
-
   # Search Mode
   #- { key: Return,                mode: Search|Vi,  action: SearchConfirm         }
   #- { key: Escape,                mode: Search,     action: SearchCancel          }
@@ -684,7 +647,6 @@ key_bindings:
   #- { key: Down,                  mode: Search,     action: SearchHistoryNext     }
   #- { key: Return,                mode: Search|~Vi, action: SearchFocusNext       }
   #- { key: Return, mods: Shift,   mode: Search|~Vi, action: SearchFocusPrevious   }
-
   # (Windows, Linux, and BSD only)
   #- { key: V,              mods: Control|Shift, mode: ~Vi,        action: Paste            }
   #- { key: C,              mods: Control|Shift,                   action: Copy             }
@@ -698,10 +660,8 @@ key_bindings:
   #- { key: NumpadAdd,      mods: Control,                         action: IncreaseFontSize }
   #- { key: Minus,          mods: Control,                         action: DecreaseFontSize }
   #- { key: NumpadSubtract, mods: Control,                         action: DecreaseFontSize }
-
   # (Windows only)
   #- { key: Return,   mods: Alt,           action: ToggleFullscreen }
-
   # (macOS only)
   #- { key: K,              mods: Command, mode: ~Vi|~Search, chars: "\x0c"                 }
   #- { key: K,              mods: Command, mode: ~Vi|~Search, action: ClearHistory          }
@@ -723,15 +683,12 @@ key_bindings:
   #- { key: F,              mods: Command|Control,            action: ToggleFullscreen      }
   #- { key: F,              mods: Command, mode: ~Search,     action: SearchForward         }
   #- { key: B,              mods: Command, mode: ~Search,     action: SearchBackward        }
-  - { key: Key3,     mods: Alt,     chars: "#"                        }
-
-#debug:
+  - { key: Key3, mods: Alt, chars: "#" }
+  #debug:
   # Display the time it takes to redraw each frame.
   #render_timer: false
-
   # Keep the log file after quitting Alacritty.
   #persistent_logging: false
-
   # Log level
   #
   # Values for `log_level`:
@@ -742,6 +699,5 @@ key_bindings:
   #   - Debug
   #   - Trace
   #log_level: Warn
-
   # Print all received window events.
   #print_events: false
