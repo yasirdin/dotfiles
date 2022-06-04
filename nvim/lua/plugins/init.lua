@@ -3,15 +3,14 @@ return require('packer').startup(function(use)
 
   use 'airblade/vim-gitgutter'
 
-  use 'ishan9299/nvim-solarized-lua'
-
   use {
     'kyazdani42/nvim-tree.lua',
     requires = {
       'kyazdani42/nvim-web-devicons',
     },
-    config = function() require'nvim-tree'.setup {} end
   }
+
+  use 'ishan9299/nvim-solarized-lua'
 
   use {
     'neovim/nvim-lspconfig',
@@ -23,6 +22,7 @@ return require('packer').startup(function(use)
     'hrsh7th/cmp-nvim-lsp',
     'saadparwaiz1/cmp_luasnip',
     'L3MON4D3/LuaSnip',
+    'hrsh7th/cmp-emoji'
   }
 
   use {
@@ -37,20 +37,22 @@ return require('packer').startup(function(use)
     requires = { {'nvim-lua/plenary.nvim'} }
   }
 
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make'}
+
   use 'ntpeters/vim-better-whitespace'
 
   use {
     'terrortylor/nvim-comment',
     config = function ()
-       require('nvim_comment').setup({line_mapping = "<leader>cl", operator_mapping = "<leader>c"})
+       require('nvim_comment').setup({line_mapping = '<leader>cl', operator_mapping = '<leader>c'})
     end
   }
 
-  use "numToStr/FTerm.nvim"
+  use 'numToStr/FTerm.nvim'
 
   use 'preservim/vim-markdown'
 
-  use "ellisonleao/gruvbox.nvim"
+  use 'Vimjas/vim-python-pep8-indent'
 
-  use "Vimjas/vim-python-pep8-indent"
+  use 'stsewd/isort.nvim'
 end)
