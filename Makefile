@@ -7,10 +7,12 @@ symlink:
 	ln -sf $(shell pwd)/.zshrc ~/.zshrc
 	ln -sf $(shell pwd)/.tmux.conf ~/.tmux.conf
 	ln -sf $(shell pwd)/.muttrc ~/.muttrc
-	ln -sf $(shell pwd)/alacritty/alacritty.yml ~/.config/alacritty/alacritty.yml
+	ln -sf $(shell pwd)/alacritty/alacritty.toml ~/.alacritty.toml
 	ln -sf $(shell pwd)/nvim ~/.config
+	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
 
 install-tmux:
+	brew install tmux
 	# Install Tmux Plugin Manager (TPM)
 	if [ ! -d ~/.tmux/plugins/tpm ]; then \
 		git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; \
@@ -39,6 +41,7 @@ brew-install-nvim:
 	brew install nvim
 
 brew-install-fonts:
+	brew tap homebrew/cask-fonts
 	brew install --cask font-iosevka-nerd-font
 
 brew-installs: brew-update brew-install-fonts brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-nvim brew-install-gh
@@ -74,6 +77,8 @@ install-python-lsps:
 turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
 	killall Dock
+
+# TODO: macos key repeating commands
 
 install-node-js:
 	curl -sL install-node.vercel.app/lts | bash
