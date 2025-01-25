@@ -1,3 +1,4 @@
 *.swp
 .muttrc
 nvim/plugin
+.DS_Store
