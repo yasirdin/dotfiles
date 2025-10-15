@@ -78,7 +78,12 @@ turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
 	killall Dock
 
-# TODO: macos key repeating commands
+# https://mac-key-repeat.zaymon.dev/
+# Note: You must log out or restart for these changes to take effect.
+key-repeat:
+	defaults write -g InitialKeyRepeat -int 12
+	defaults write -g KeyRepeat -int 2
+	defaults write -g ApplePressAndHoldEnabled -bool false
 
 install-node-js:
 	curl -sL install-node.vercel.app/lts | bash
