@@ -1,74 +1,137 @@
-.PHONY: all
-all: symlink install-tmux brew-installs tmux-vim-select-pane install-oh-my-zsh install-packer-nvim install-python-linters turn-off-macos-dock-bounce
+.PHONY: all check-prerequisites check-homebrew check-xcode symlink install-tmux \
+        brew-update brew-installs brew-install-terraform brew-install-alacritty \
+        brew-install-ripgrep-fzf brew-install-gh brew-install-node brew-install-nvim brew-install-fonts \
+        brew-install-raycast brew-install-leader-key install-opencode install-oh-my-zsh install-nvim-plugins install-python-linters install-python-lsps \
+        turn-off-macos-dock-bounce clean clean-nvim verify
 
-# Overwrite dotfiles in $HOME and soft symbolic link
+# Detect architecture: Apple Silicon vs Intel
+UNAME_M := $(shell uname -m)
+ifeq ($(UNAME_M),arm64)
+    HOMEBREW_PREFIX := /opt/homebrew
+else
+    HOMEBREW_PREFIX := /usr/local
+endif
+
+all: check-prerequisites brew-installs install-oh-my-zsh install-tmux symlink install-nvim-plugins install-python-linters install-opencode turn-off-macos-dock-bounce
+	@echo "✓ Setup complete!"
+
+check-prerequisites: check-xcode check-homebrew
+	@mkdir -p ~/.config
+	@echo "✓ Prerequisites satisfied"
+
+check-xcode:
+	@if ! xcode-select -p &>/dev/null; then \
+		echo "Installing Xcode Command Line Tools..."; \
+		xcode-select --install; \
+		echo "Please re-run 'make all' after installation completes."; \
+		exit 1; \
+	fi
+	@echo "✓ Xcode CLT installed"
+
+check-homebrew:
+	@if ! command -v brew &>/dev/null; then \
+		echo "Installing Homebrew..."; \
+		/bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"; \
+		echo "Please restart your terminal and re-run 'make all'"; \
+		exit 1; \
+	fi
+	@echo "✓ Homebrew installed ($(HOMEBREW_PREFIX))"
+
 symlink:
-	ln -sf $(shell pwd)/.vimrc ~/.vimrc
+	@echo "Creating symlinks..."
 	ln -sf $(shell pwd)/.zshrc ~/.zshrc
 	ln -sf $(shell pwd)/.tmux.conf ~/.tmux.conf
-	ln -sf $(shell pwd)/.muttrc ~/.muttrc
-	ln -sf $(shell pwd)/alacritty/alacritty.toml ~/.alacritty.toml
-	ln -sf $(shell pwd)/nvim ~/.config
+	ln -sfn $(shell pwd)/alacritty ~/.config/alacritty
+	ln -sfn $(shell pwd)/nvim ~/.config/nvim
 	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
+	@echo "✓ Symlinks created"
 
 install-tmux:
-	brew install tmux
-	# Install Tmux Plugin Manager (TPM)
-	if [ ! -d ~/.tmux/plugins/tpm ]; then \
+	@echo "Installing tmux and TPM..."
+	brew list tmux &>/dev/null || brew install tmux
+	@if [ ! -d ~/.tmux/plugins/tpm ]; then \
 		git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; \
 	fi
+	@echo "Installing tmux plugins..."
+	~/.tmux/plugins/tpm/bin/install_plugins
+	@echo "✓ Tmux and plugins installed"
 
 brew-update:
 	brew update
 	brew upgrade
 
 brew-install-terraform:
-	brew tap hashicorp/tap
-	brew install hashicorp/tap/terraform
+	brew tap hashicorp/tap 2>/dev/null || true
+	brew list hashicorp/tap/terraform &>/dev/null || brew install hashicorp/tap/terraform
 
 brew-install-alacritty:
-	brew install --cask alacritty
+	brew list --cask alacritty &>/dev/null || brew install --cask alacritty
 
 brew-install-ripgrep-fzf:
-	brew install fzf
-	$(shell brew --prefix)/opt/fzf/install --all
-	brew install ripgrep
+	brew list fzf &>/dev/null || brew install fzf
+	@if [ ! -f ~/.fzf.zsh ]; then \
+		$(HOMEBREW_PREFIX)/opt/fzf/install --all --no-bash --no-fish; \
+	fi
+	brew list ripgrep &>/dev/null || brew install ripgrep
 
 brew-install-gh:
-	brew install gh
+	brew list gh &>/dev/null || brew install gh
+
+brew-install-node:
+	brew list node &>/dev/null || brew install node
 
 brew-install-nvim:
-	brew install nvim
+	brew list neovim &>/dev/null || brew install neovim
 
 brew-install-fonts:
-	brew tap homebrew/cask-fonts
-	brew install --cask font-iosevka-nerd-font
+	brew list --cask font-iosevka-nerd-font &>/dev/null || brew install --cask font-iosevka-nerd-font
 
-brew-installs: brew-update brew-install-fonts brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-nvim brew-install-gh
+brew-install-raycast:
+	brew list --cask raycast &>/dev/null || brew install --cask raycast
 
-tmux-vim-select-pane:
-	curl -fsSL https://raw.github.com/mislav/dotfiles/1500cd2/bin/tmux-vim-select-pane \
-		  -o /usr/local/bin/tmux-vim-select-pane
-	chmod +x /usr/local/bin/tmux-vim-select-pane
+brew-install-leader-key:
+	brew list leader-key &>/dev/null || brew install leader-key
+
+brew-installs: brew-update brew-install-fonts brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-node brew-install-nvim brew-install-gh brew-install-raycast brew-install-leader-key
+	@echo "✓ Brew packages installed"
+
+install-opencode:
+	@if [ ! -x ~/.opencode/bin/opencode ]; then \
+		echo "Installing opencode..."; \
+		curl -fsSL https://opencode.ai/install | bash; \
+	fi
+	@echo "✓ opencode installed"
+	@echo "⚠️  Run 'opencode auth login' to authenticate"
 
 install-oh-my-zsh:
-	if [ ! -d ~/.oh-my-zsh ]; then \
-		sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"; \
+	@if [ ! -d ~/.oh-my-zsh ]; then \
+		echo "Installing Oh My Zsh..."; \
+		RUNZSH=no CHSH=no sh -c "$$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"; \
 	fi
+	@echo "✓ Oh My Zsh installed"
 
-install-packer-nvim:
-	if [ ! -d ~/.local/share/nvim/site/pack/packer/start/packer.nvim ]; then \
-		git clone --depth 1 https://github.com/wbthomason/packer.nvim \
-			~/.local/share/nvim/site/pack/packer/start/packer.nvim; \
+install-nvim-plugins:
+	@echo "Neovim plugin installation:"
+	@echo "  [1] Install from lockfile (default, recommended)"
+	@echo "  [2] Update to latest versions"
+	@read -p "Choose [1/2]: " choice; \
+	choice=$${choice:-1}; \
+	if [ "$$choice" = "2" ]; then \
+		echo "Updating plugins to latest versions..."; \
+		nvim --headless "+Lazy! update" +qa; \
+		echo "✓ Neovim plugins updated and lockfile regenerated"; \
+	else \
+		echo "Installing from lockfile..."; \
+		nvim --headless "+Lazy! sync" +qa; \
+		echo "✓ Neovim plugins installed from lockfile"; \
 	fi
-	nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
 
 install-python-linters:
-	python3 --version
+	@echo "Installing Python linters..."
 	python3 -m pip install --user --upgrade pip
 	python3 -m pip install --user mypy flake8
+	@echo "✓ Python linters installed"
 
-# Installation location has to be in $PATH for nvim LSP to access
 install-python-lsps:
 	python3 -m pip install --user python-lsp-server
 	python3 -m pip install --user python-lsp-black
@@ -78,7 +141,34 @@ turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
 	killall Dock
 
-# TODO: macos key repeating commands
+enable-key-repeat:
+	defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
+	defaults write NSGlobalDomain KeyRepeat -int 2
+	defaults write NSGlobalDomain InitialKeyRepeat -int 15
+	@echo "✓ Key repeat enabled (restart apps to take effect)"
 
-install-node-js:
-	curl -sL install-node.vercel.app/lts | bash
+clean-nvim:
+	@echo "Cleaning up Neovim data..."
+	rm -rf ~/.local/share/nvim/site/pack/packer
+	rm -rf ~/.local/share/nvim/lazy
+	rm -rf ~/.local/state/nvim
+	rm -rf ~/.cache/nvim
+	@echo "✓ Neovim data cleaned"
+
+clean: clean-nvim
+	@echo "Cleaning up all generated files..."
+	rm -rf ~/.tmux/plugins
+	@echo "✓ Cleanup complete"
+
+verify:
+	@echo "Verifying setup..."
+	@nvim --version | head -1
+	@nvim --headless -c 'qa' 2>&1 && echo "✓ Neovim config loads without errors"
+	@nvim --headless -c 'lua print("lazy.nvim: " .. (pcall(require, "lazy") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("telescope: " .. (pcall(require, "telescope") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("Navigator: " .. (pcall(require, "Navigator") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("nvim-tree: " .. (pcall(require, "nvim-tree") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("nvim-cmp: " .. (pcall(require, "cmp") and "OK" or "FAIL"))' -c 'qa'
+	@tmux -V
+	@test -d ~/.tmux/plugins/vim-tmux-navigator && echo "✓ vim-tmux-navigator: OK" || echo "✗ vim-tmux-navigator: MISSING"
+	@echo "✓ Verification complete"
