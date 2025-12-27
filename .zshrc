@@ -112,27 +112,36 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias config='/usr/bin/git --git-dir=/Users/yasirdin/.cfg/ --work-tree=/Users/yasirdin'
-export PATH="/Users/yasirdin/anaconda3/bin:$PATH"
+# Dotfiles management via bare git repo (optional)
+if [ -d "$HOME/.cfg" ]; then
+  alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+fi
+
+# Anaconda (if installed)
+if [ -d "$HOME/anaconda3" ]; then
+  export PATH="$HOME/anaconda3/bin:$PATH"
+fi
 
 function cd_up() {
   cd $(printf "%0.s../" $(seq 1 $1 ));
 }
 alias 'cd..'='cd_up'
 
-# VS Code
-export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/yasirdin/Desktop/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/yasirdin/Desktop/google-cloud-sdk/completion.zsh.inc'; fi
+# VS Code (if installed)
+if [ -d "/Applications/Visual Studio Code.app" ]; then
+  export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Terraform completion (architecture-aware)
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/terraform terraform
+if [[ $(uname -m) == "arm64" ]]; then
+  [ -x /opt/homebrew/bin/terraform ] && complete -o nospace -C /opt/homebrew/bin/terraform terraform
+else
+  [ -x /usr/local/bin/terraform ] && complete -o nospace -C /usr/local/bin/terraform terraform
+fi
 
 # cd to repository root
 alias rr='cd $(git rev-parse --show-toplevel)'
+export PATH="$HOME/.local/bin:$PATH"
