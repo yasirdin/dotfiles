@@ -12,6 +12,20 @@ return {
       map('n', "<leader>g", string.format(":Telescope live_grep theme=%s<CR>", theme), opts)
 
       require('telescope').setup {
+        defaults = {
+          devicons_enabled = false,
+        },
+        pickers = {
+          find_files = {
+            devicons_enabled = false,
+          },
+          buffers = {
+            devicons_enabled = false,
+          },
+          live_grep = {
+            devicons_enabled = false,
+          },
+        },
         extensions = {
           fzf = {
             fuzzy = true,

@@ -1,7 +1,6 @@
 return {
   {
     'nvim-tree/nvim-tree.lua',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = function()
       require'nvim-tree'.setup {
         disable_netrw        = true,
@@ -12,6 +11,14 @@ return {
         update_cwd           = false,
         renderer = {
           highlight_opened_files = 'all',
+          icons = {
+            show = {
+              file = false,
+              folder = false,
+              folder_arrow = true,
+              git = false,
+            },
+          },
         },
         diagnostics = {
           enable = false,

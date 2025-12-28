@@ -39,3 +39,17 @@ require('keymaps')
 -- Set colorscheme
 vim.opt.background = "dark"
 vim.cmd([[colorscheme solarized]])
+
+-- Custom highlight overrides (reapplied on colorscheme change)
+vim.api.nvim_create_autocmd('ColorScheme', {
+  callback = function()
+    -- Fix default intro screen highlight (the <Enter> keys)
+    vim.api.nvim_set_hl(0, 'SpecialKey', { fg = '#268bd2', bg = 'NONE' })
+    -- Telescope selection: yellow text on darker background
+    vim.api.nvim_set_hl(0, 'TelescopeSelection', { fg = '#b58900', bg = '#073642', bold = true })
+  end,
+})
+
+-- Apply highlights for initial colorscheme
+vim.api.nvim_set_hl(0, 'SpecialKey', { fg = '#268bd2', bg = 'NONE' })
+vim.api.nvim_set_hl(0, 'TelescopeSelection', { fg = '#b58900', bg = '#073642', bold = true })
