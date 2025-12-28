@@ -147,4 +147,4 @@ alias rr='cd $(git rev-parse --show-toplevel)'
 export PATH="$HOME/.local/bin:$PATH"
 
 # opencode
-export PATH=/Users/yasirdin/.opencode/bin:$PATH
+export PATH="$HOME/.opencode/bin:$PATH"

@@ -1,4 +1,4 @@
-.PHONY: all check-prerequisites check-homebrew check-xcode symlink install-tmux \
+.PHONY: all check-prerequisites check-homebrew check-xcode backup symlink install-tmux \
         brew-update brew-installs brew-install-terraform brew-install-alacritty \
         brew-install-ripgrep-fzf brew-install-gh brew-install-node brew-install-nvim brew-install-fonts \
         brew-install-raycast brew-install-leader-key install-opencode install-oh-my-zsh install-nvim-plugins install-python-linters install-python-lsps \
@@ -37,7 +37,19 @@ check-homebrew:
 	fi
 	@echo "✓ Homebrew installed ($(HOMEBREW_PREFIX))"
 
-symlink:
+BACKUP_DIR := ~/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
+
+backup:
+	@echo "Backing up existing configs to $(BACKUP_DIR)..."
+	@mkdir -p $(BACKUP_DIR)
+	@for f in ~/.zshrc ~/.tmux.conf ~/.amethyst.yml ~/.config/alacritty ~/.config/nvim; do \
+		if [ -e "$$f" ] && [ ! -L "$$f" ]; then \
+			cp -r "$$f" $(BACKUP_DIR)/ 2>/dev/null && echo "  Backed up $$f"; \
+		fi; \
+	done
+	@echo "✓ Backup complete"
+
+symlink: backup
 	@echo "Creating symlinks..."
 	ln -sf $(shell pwd)/.zshrc ~/.zshrc
 	ln -sf $(shell pwd)/.tmux.conf ~/.tmux.conf

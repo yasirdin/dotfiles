@@ -1,4 +1,7 @@
 *.swp
-.muttrc
-nvim/plugin
+*.swo
+*~
 .DS_Store
+.muttrc
+.opencode/
+nvim/plugin

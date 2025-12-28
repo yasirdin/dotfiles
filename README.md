@@ -1,9 +1,9 @@
 # dotfiles
 
-My dotfiles, along with a Makefile to automate setup.
+My dotfiles for macOS, with automated setup via Makefile.
 
-## Setup
+## Quick Start
 
-```terminal
-$ make all
+```bash
+make all
 ```
