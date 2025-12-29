@@ -143,7 +143,7 @@ else
 fi
 
 # cd to repository root
-alias rr='cd $(git rev-parse --show-toplevel)'
+alias rr='cd "$(git rev-parse --show-toplevel)"'
 export PATH="$HOME/.local/bin:$PATH"
 
 # opencode
