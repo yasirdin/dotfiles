@@ -1,7 +1,7 @@
 .PHONY: all check-prerequisites check-homebrew check-xcode backup symlink install-tmux \
         brew-update brew-installs brew-install-terraform brew-install-alacritty \
         brew-install-ripgrep-fzf brew-install-gh brew-install-node brew-install-nvim brew-install-fonts \
-        brew-install-raycast brew-install-leader-key install-opencode install-oh-my-zsh install-nvim-plugins install-python-linters install-python-lsps \
+        brew-install-raycast brew-install-leader-key install-opencode install-claude-code install-oh-my-zsh install-nvim-plugins install-python-linters install-python-lsps \
         turn-off-macos-dock-bounce clean clean-nvim verify
 
 # Detect architecture: Apple Silicon vs Intel
@@ -12,7 +12,7 @@ else
     HOMEBREW_PREFIX := /usr/local
 endif
 
-all: check-prerequisites brew-installs install-oh-my-zsh install-tmux symlink install-nvim-plugins install-python-linters install-opencode turn-off-macos-dock-bounce
+all: check-prerequisites brew-installs install-oh-my-zsh install-tmux symlink install-nvim-plugins install-python-linters install-opencode install-claude-code turn-off-macos-dock-bounce
 	@echo "✓ Setup complete!"
 
 check-prerequisites: check-xcode check-homebrew
@@ -114,6 +114,13 @@ install-opencode:
 	fi
 	@echo "✓ opencode installed"
 	@echo "⚠️  Run 'opencode auth login' to authenticate"
+
+install-claude-code:
+	@if ! command -v claude &>/dev/null; then \
+		echo "Installing Claude Code..."; \
+		npm install -g @anthropic-ai/claude-code; \
+	fi
+	@echo "✓ Claude Code installed"
 
 install-oh-my-zsh:
 	@if [ ! -d ~/.oh-my-zsh ]; then \
