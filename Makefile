@@ -60,49 +60,61 @@ symlink: backup
 
 install-tmux:
 	@echo "Installing tmux and TPM..."
-	brew list tmux &>/dev/null || brew install tmux
+	@brew list tmux &>/dev/null || brew install tmux || true
 	@if [ ! -d ~/.tmux/plugins/tpm ]; then \
 		git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm; \
 	fi
 	@echo "Installing tmux plugins..."
-	~/.tmux/plugins/tpm/bin/install_plugins
+	@~/.tmux/plugins/tpm/bin/install_plugins || true
 	@echo "✓ Tmux and plugins installed"
 
 brew-update:
-	brew update
-	brew upgrade
+	@echo "Updating Homebrew..."
+	@brew update || true
+	@echo "Upgrading existing packages..."
+	@brew upgrade || true
+	@echo "✓ Homebrew updated"
 
 brew-install-terraform:
-	brew tap hashicorp/tap 2>/dev/null || true
-	brew list hashicorp/tap/terraform &>/dev/null || brew install hashicorp/tap/terraform
+	@brew tap hashicorp/tap 2>/dev/null || true
+	@brew list hashicorp/tap/terraform &>/dev/null || brew install hashicorp/tap/terraform || true
+	@echo "✓ Terraform checked/installed"
 
 brew-install-alacritty:
-	brew list --cask alacritty &>/dev/null || brew install --cask alacritty
+	@brew list --cask alacritty &>/dev/null || brew install --cask alacritty || true
+	@echo "✓ Alacritty checked/installed"
 
 brew-install-ripgrep-fzf:
-	brew list fzf &>/dev/null || brew install fzf
+	@brew list fzf &>/dev/null || brew install fzf || true
 	@if [ ! -f ~/.fzf.zsh ]; then \
 		$(HOMEBREW_PREFIX)/opt/fzf/install --all --no-bash --no-fish; \
 	fi
-	brew list ripgrep &>/dev/null || brew install ripgrep
+	@brew list ripgrep &>/dev/null || brew install ripgrep || true
+	@echo "✓ fzf and ripgrep checked/installed"
 
 brew-install-gh:
-	brew list gh &>/dev/null || brew install gh
+	@brew list gh &>/dev/null || brew install gh || true
+	@echo "✓ GitHub CLI checked/installed"
 
 brew-install-node:
-	brew list node &>/dev/null || brew install node
+	@brew list node &>/dev/null || brew install node || true
+	@echo "✓ Node checked/installed"
 
 brew-install-nvim:
-	brew list neovim &>/dev/null || brew install neovim
+	@brew list neovim &>/dev/null || brew install neovim || true
+	@echo "✓ Neovim checked/installed"
 
 brew-install-fonts:
-	brew list --cask font-iosevka-nerd-font &>/dev/null || brew install --cask font-iosevka-nerd-font
+	@brew list --cask font-iosevka-nerd-font &>/dev/null || brew install --cask font-iosevka-nerd-font || true
+	@echo "✓ Iosevka Nerd Font checked/installed"
 
 brew-install-raycast:
-	brew list --cask raycast &>/dev/null || brew install --cask raycast
+	@brew list --cask raycast &>/dev/null || brew install --cask raycast || true
+	@echo "✓ Raycast checked/installed"
 
 brew-install-leader-key:
-	brew list leader-key &>/dev/null || brew install leader-key
+	@brew list leader-key &>/dev/null || brew install leader-key || true
+	@echo "✓ Leader Key checked/installed"
 
 brew-installs: brew-update brew-install-fonts brew-install-terraform brew-install-alacritty brew-install-ripgrep-fzf brew-install-node brew-install-nvim brew-install-gh brew-install-raycast brew-install-leader-key
 	@echo "✓ Brew packages installed"
