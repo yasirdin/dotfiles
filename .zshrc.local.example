@@ -1,0 +1,22 @@
+# Template for local-only secrets. Copy to ~/.zshrc.local and fill in real
+# values. ~/.zshrc.local is gitignored and must never be committed.
+#   cp .zshrc.local.example ~/.zshrc.local
+
+# PyPi
+export PYPI_USERNAME='your.username'
+export PYPI_PASSWORD='your-pypi-token'
+export UV_INDEX_YOURINDEX_USERNAME="$PYPI_USERNAME"
+export UV_INDEX_YOURINDEX_PASSWORD="$PYPI_PASSWORD"
+
+# GitLab
+export GITLAB_USERNAME='your.username'
+export GITLAB_TOKEN='your-gitlab-token'
+
+# Snowflake
+export SNOWFLAKE_USER='YOURUSER'
+export SNOWFLAKE_PASSWORD='your-snowflake-password'
+export SNOWFLAKE_ACCOUNT='account.region'
+export SNOWFLAKE_WAREHOUSE='WAREHOUSE'
+export SNOWFLAKE_DATABASE='DATABASE'
+export SNOWFLAKE_SCHEMA='SCHEMA'
+export SNOWFLAKE_ROLE='ROLE'

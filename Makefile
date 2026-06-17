@@ -58,6 +58,10 @@ symlink: backup
 	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
 	@mkdir -p ~/.claude
 	ln -sf $(shell pwd)/claude/statusline.sh ~/.claude/statusline.sh
+	@if [ ! -f ~/.zshrc.local ]; then \
+		cp $(shell pwd)/.zshrc.local.example ~/.zshrc.local; \
+		echo "  Created ~/.zshrc.local from example — fill in real secrets"; \
+	fi
 	@echo "✓ Symlinks created"
 
 install-tmux:

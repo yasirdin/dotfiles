@@ -148,3 +148,12 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # opencode
 export PATH="$HOME/.opencode/bin:$PATH"
+
+# Claude Code's renderer caps at 256-color whenever $TMUX is set (quantizing
+# themed backgrounds to a clashing teal). Hiding $TMUX makes it emit truecolor;
+# tmux still forwards it correctly thanks to the RGB terminal-overrides above.
+claude() { env -u TMUX -u TMUX_PANE command claude "$@"; }
+
+# Local-only secrets and machine-specific config (not tracked in this repo).
+# See ~/.zshrc.local — copy ~/.zshrc.local.example to get started.
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local

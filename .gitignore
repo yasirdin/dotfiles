@@ -5,3 +5,6 @@
 .muttrc
 .opencode/
 nvim/plugin
+
+# Local-only secrets — never commit
+.zshrc.local
