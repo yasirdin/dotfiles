@@ -106,7 +106,8 @@ brew-install-nvim:
 
 brew-install-fonts:
 	@brew list --cask font-iosevka-nerd-font &>/dev/null || brew install --cask font-iosevka-nerd-font || true
-	@echo "✓ Iosevka Nerd Font checked/installed"
+	@brew list --cask font-jetbrains-mono-nerd-font &>/dev/null || brew install --cask font-jetbrains-mono-nerd-font || true
+	@echo "✓ Nerd Fonts checked/installed"
 
 brew-install-raycast:
 	@brew list --cask raycast &>/dev/null || brew install --cask raycast || true
