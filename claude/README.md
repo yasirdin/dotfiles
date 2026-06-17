@@ -19,13 +19,26 @@ Opus high · main* · +156/-23 · ctx 42% · 5h 23% 7d 41% · $0.34
 
 Requires `jq`. Colors target a Solarized theme; truecolor (`COLORTERM=truecolor`).
 
-### Install
+## themes/solarized-blend.json
 
-`make symlink` links this script to `~/.claude/statusline.sh`. To activate it,
-add the following to `~/.claude/settings.json` (that file is not tracked here
-because it holds machine/account-specific hooks and plugins):
+Custom Claude Code theme that blends message/prompt backgrounds into the
+Solarized base (`userMessageBackground` etc.). Symlinked to
+`~/.claude/themes/solarized-blend.json`.
+
+## Install
+
+`~/.claude/settings.json` is **not** tracked here (it holds account-specific
+hooks, plugins, and tokens), so `make` reproduces the Claude setup in two steps:
+
+- `make symlink` links `statusline.sh` and `themes/solarized-blend.json` into
+  `~/.claude/`.
+- `make configure-claude` merges just the `theme` and `statusLine` keys into
+  `~/.claude/settings.json` with jq, non-destructively (all other keys kept).
+
+Both run as part of `make all`. The keys it sets:
 
 ```json
+"theme": "custom:solarized-blend",
 "statusLine": {
   "type": "command",
   "command": "~/.claude/statusline.sh",

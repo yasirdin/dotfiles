@@ -1,0 +1,9 @@
+{
+  "name": "Solarized Blend",
+  "base": "dark",
+  "overrides": {
+    "userMessageBackground": "#002b36",
+    "userMessageBackgroundHover": "#073642",
+    "messageActionsBackground": "#073642"
+  }
+}

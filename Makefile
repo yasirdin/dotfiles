@@ -2,7 +2,7 @@
         brew-update brew-installs brew-install-terraform brew-install-alacritty \
         brew-install-ripgrep-fzf brew-install-gh brew-install-node brew-install-nvim brew-install-fonts \
         brew-install-raycast brew-install-leader-key install-opencode install-claude-code install-oh-my-zsh install-nvim-plugins install-python-linters install-python-lsps \
-        turn-off-macos-dock-bounce clean clean-nvim verify
+        turn-off-macos-dock-bounce configure-claude clean clean-nvim verify
 
 # Detect architecture: Apple Silicon vs Intel
 UNAME_M := $(shell uname -m)
@@ -12,7 +12,7 @@ else
     HOMEBREW_PREFIX := /usr/local
 endif
 
-all: check-prerequisites brew-installs install-oh-my-zsh install-tmux symlink install-nvim-plugins install-python-linters install-opencode install-claude-code turn-off-macos-dock-bounce
+all: check-prerequisites brew-installs install-oh-my-zsh install-tmux symlink install-nvim-plugins install-python-linters install-opencode install-claude-code configure-claude turn-off-macos-dock-bounce
 	@echo "✓ Setup complete!"
 
 check-prerequisites: check-xcode check-homebrew
@@ -56,13 +56,26 @@ symlink: backup
 	ln -sfn $(shell pwd)/alacritty ~/.config/alacritty
 	ln -sfn $(shell pwd)/nvim ~/.config/nvim
 	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
-	@mkdir -p ~/.claude
+	@mkdir -p ~/.claude ~/.claude/themes
 	ln -sf $(shell pwd)/claude/statusline.sh ~/.claude/statusline.sh
+	ln -sf $(shell pwd)/claude/themes/solarized-blend.json ~/.claude/themes/solarized-blend.json
 	@if [ ! -f ~/.zshrc.local ]; then \
 		cp $(shell pwd)/.zshrc.local.example ~/.zshrc.local; \
 		echo "  Created ~/.zshrc.local from example — fill in real secrets"; \
 	fi
 	@echo "✓ Symlinks created"
+
+# Enable the tracked theme + status line in Claude Code's settings.json. That
+# file isn't tracked (it holds account-specific hooks/plugins/tokens), so we
+# merge in just these two keys non-destructively with jq, leaving everything
+# else untouched. The theme file and statusline.sh are symlinked by `symlink`.
+configure-claude:
+	@echo "Configuring Claude Code (theme + status line)..."
+	@brew list jq &>/dev/null || brew install jq || true
+	@mkdir -p ~/.claude
+	@[ -s ~/.claude/settings.json ] || echo '{}' > ~/.claude/settings.json
+	@tmp=$$(mktemp) && jq '.theme = "custom:solarized-blend" | .statusLine = {"type":"command","command":"~/.claude/statusline.sh","padding":0,"refreshInterval":5}' ~/.claude/settings.json > "$$tmp" && mv "$$tmp" ~/.claude/settings.json
+	@echo "✓ Claude theme + status line configured"
 
 install-tmux:
 	@echo "Installing tmux and TPM..."
