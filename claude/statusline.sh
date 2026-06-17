@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line. Receives session JSON on stdin, prints one line.
-# Layout:  Opus high · main* · ctx 42% · 5h 23% 7d 41% · $0.34 +156/-23
+# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h 23% 7d 41% · $0.34
 set -o pipefail
 
 input=$(cat)
@@ -17,12 +17,10 @@ while IFS= read -r line; do F+=("$line"); done < <(
     (.rate_limits.five_hour.used_percentage // ""),
     (.rate_limits.seven_day.used_percentage // ""),
     (.cost.total_cost_usd // 0),
-    (.cost.total_lines_added // 0),
-    (.cost.total_lines_removed // 0),
     (.workspace.current_dir // .cwd // "")'
 )
 model=${F[0]}; effort=${F[1]}; ctx=${F[2]}; five=${F[3]}; seven=${F[4]}
-cost=${F[5]}; added=${F[6]}; removed=${F[7]}; cwd=${F[8]}
+cost=${F[5]}; cwd=${F[6]}
 
 # --- Solarized truecolor palette (COLORTERM=truecolor) ---
 GRN='133;153;0'; YEL='181;137;0'; RED='220;50;47'
@@ -47,7 +45,7 @@ m=$(c "$CYAN" "$model")
 [ -n "$effort" ] && m="$m $(c "$MUTED" "$effort")"
 segments+=("$m")
 
-# 2) Git branch + dirty marker
+# 2) Git branch + dirty marker, then an MR-style diff stat
 if [ -n "$cwd" ]; then
   branch=$(git -C "$cwd" symbolic-ref --quiet --short HEAD 2>/dev/null)
   if [ -n "$branch" ]; then
@@ -58,6 +56,23 @@ if [ -n "$cwd" ]; then
     else
       segments+=("$(c "$GRN" "$branch")")
     fi
+
+    # Diff stat vs the default branch (committed branch changes + uncommitted
+    # working-tree edits), like the diff shown when opening an MR.
+    base=$(git -C "$cwd" symbolic-ref --quiet refs/remotes/origin/HEAD 2>/dev/null)
+    base=${base#refs/remotes/}
+    if [ -z "$base" ]; then
+      for b in origin/main origin/master main master; do
+        git -C "$cwd" rev-parse --verify --quiet "$b" >/dev/null 2>&1 && { base=$b; break; }
+      done
+    fi
+    mb=""
+    [ -n "$base" ] && mb=$(git -C "$cwd" merge-base HEAD "$base" 2>/dev/null)
+    [ -z "$mb" ] && mb=HEAD   # fallback: count uncommitted changes only
+    stat=$(git -C "$cwd" diff --shortstat "$mb" 2>/dev/null)
+    add=$(printf '%s' "$stat" | grep -oE '[0-9]+ insertion' | grep -oE '^[0-9]+'); add=${add:-0}
+    rem=$(printf '%s' "$stat" | grep -oE '[0-9]+ deletion'  | grep -oE '^[0-9]+'); rem=${rem:-0}
+    segments+=("$(c "$GRN" "+$add")$(c "$MUTED" '/')$(c "$RED" "-$rem")")
   fi
 fi
 
@@ -76,12 +91,8 @@ if [ -n "$seven" ]; then
 fi
 [ -n "$limit" ] && segments+=("$limit")
 
-# 5) Cost + lines changed
-costseg="$(c "$MUTED" "\$$(printf '%.2f' "$cost")")"
-if [ "$added" != "0" ] || [ "$removed" != "0" ]; then
-  costseg="$costseg $(c "$GRN" "+$added")$(c "$MUTED" '/')$(c "$RED" "-$removed")"
-fi
-segments+=("$costseg")
+# 5) Session cost
+segments+=("$(c "$MUTED" "\$$(printf '%.2f' "$cost")")")
 
 # Join with dim separators.
 out=""
