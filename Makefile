@@ -86,6 +86,10 @@ brew-install-terraform:
 	@brew list hashicorp/tap/terraform &>/dev/null || brew install hashicorp/tap/terraform || true
 	@echo "✓ Terraform checked/installed"
 
+# TODO(by 2026-09-01): the alacritty Homebrew cask is deprecated (fails the
+# macOS Gatekeeper/notarization check) and will be DISABLED on 2026-09-01,
+# after which this install will fail. Before then, switch to building from
+# source (cargo install alacritty) or move to a notarized terminal.
 brew-install-alacritty:
 	@brew list --cask alacritty &>/dev/null || brew install --cask alacritty || true
 	@echo "✓ Alacritty checked/installed"
