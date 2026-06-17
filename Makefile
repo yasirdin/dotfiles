@@ -168,16 +168,22 @@ install-nvim-plugins:
 		echo "✓ Neovim plugins installed from lockfile"; \
 	fi
 
+# Use pipx, not pip: Homebrew's Python is "externally managed" (PEP 668), so
+# `pip install` fails with an externally-managed-environment error. pipx puts
+# each CLI tool in its own venv and links the executables onto PATH.
 install-python-linters:
 	@echo "Installing Python linters..."
-	python3 -m pip install --user --upgrade pip
-	python3 -m pip install --user mypy flake8
+	@brew list pipx &>/dev/null || brew install pipx || true
+	@pipx ensurepath >/dev/null 2>&1 || true
+	pipx install mypy || true
+	pipx install flake8 || true
 	@echo "✓ Python linters installed"
 
 install-python-lsps:
-	python3 -m pip install --user python-lsp-server
-	python3 -m pip install --user python-lsp-black
-	python3 -m pip install --user pyls-flake8
+	@brew list pipx &>/dev/null || brew install pipx || true
+	@pipx ensurepath >/dev/null 2>&1 || true
+	pipx install python-lsp-server || true
+	pipx inject python-lsp-server python-lsp-black pyls-flake8 || true
 
 turn-off-macos-dock-bounce:
 	defaults write com.apple.dock no-bouncing -bool TRUE
