@@ -11,12 +11,27 @@ return {
         update_cwd           = false,
         renderer = {
           highlight_opened_files = 'all',
+          -- Git status is shown via emoji glyphs (see icons.glyphs.git below)
+          -- rather than color, so the orange highlight stays dedicated to the
+          -- currently-open file and the two signals don't clash.
           icons = {
+            git_placement = 'after',
             show = {
               file = false,
               folder = false,
               folder_arrow = true,
-              git = false,
+              git = true,
+            },
+            glyphs = {
+              git = {
+                unstaged  = "📝",
+                staged    = "✅",
+                unmerged  = "🔀",
+                renamed   = "🔄",
+                untracked = "🆕",
+                deleted   = "❌",
+                ignored   = "🙈",
+              },
             },
           },
         },
