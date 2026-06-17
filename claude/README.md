@@ -5,7 +5,7 @@
 Custom Claude Code status line. Reads the session JSON on stdin and prints:
 
 ```
-Opus high · main* · +156/-23 · ctx 42% · 5h 23% (14:30) 7d 41% · $0.34
+Opus high · main* · +156/-23 · ctx 42% · 5h (14:30) 23% 7d 41% · $0.34
 ```
 
 - **model + effort** — model name and reasoning effort (effort hidden if unsupported)
@@ -15,7 +15,7 @@ Opus high · main* · +156/-23 · ctx 42% · 5h 23% (14:30) 7d 41% · $0.34
   when the default branch can't be resolved.
 - **context window %** — green <70, yellow 70–89, red 90+
 - **usage limits** — 5h and 7d rolling-window usage (Pro/Max only, after first
-  response); the 5h figure is followed by `(HH:MM)`, the local time it resets
+  response); the `5h` label is followed by `(HH:MM)`, the local time it resets
 - **cost** — session cost estimate
 
 Requires `jq`. Colors target a Solarized theme; truecolor (`COLORTERM=truecolor`).

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line. Receives session JSON on stdin, prints one line.
-# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h 23% (14:30) 7d 41% · $0.34
+# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h (14:30) 23% 7d 41% · $0.34
 set -o pipefail
 
 input=$(cat)
@@ -86,12 +86,13 @@ fi
 # 4) Usage limits (Pro/Max only; each window may be absent)
 limit=""
 if [ -n "$five" ]; then
-  limit="$(c "$MUTED" '5h ')$(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
-  # append the local clock time the 5h window resets at
+  limit="$(c "$MUTED" '5h')"
+  # the local clock time the 5h window resets at, in brackets next to "5h"
   if [ -n "$five_reset" ]; then
     rt=$(date -r "${five_reset%.*}" +%H:%M 2>/dev/null)
     [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
   fi
+  limit="$limit $(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
 fi
 if [ -n "$seven" ]; then
   [ -n "$limit" ] && limit="$limit "
