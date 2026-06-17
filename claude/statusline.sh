@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line. Receives session JSON on stdin, prints one line.
-# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h 23% 7d 41% · $0.34
+# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h 23% (14:30) 7d 41% · $0.34
 set -o pipefail
 
 input=$(cat)
@@ -15,12 +15,13 @@ while IFS= read -r line; do F+=("$line"); done < <(
     (.effort.level // ""),
     (.context_window.used_percentage // ""),
     (.rate_limits.five_hour.used_percentage // ""),
+    (.rate_limits.five_hour.resets_at // ""),
     (.rate_limits.seven_day.used_percentage // ""),
     (.cost.total_cost_usd // 0),
     (.workspace.current_dir // .cwd // "")'
 )
-model=${F[0]}; effort=${F[1]}; ctx=${F[2]}; five=${F[3]}; seven=${F[4]}
-cost=${F[5]}; cwd=${F[6]}
+model=${F[0]}; effort=${F[1]}; ctx=${F[2]}; five=${F[3]}; five_reset=${F[4]}
+seven=${F[5]}; cost=${F[6]}; cwd=${F[7]}
 
 # --- Solarized truecolor palette (COLORTERM=truecolor) ---
 GRN='133;153;0'; YEL='181;137;0'; RED='220;50;47'
@@ -84,7 +85,14 @@ fi
 
 # 4) Usage limits (Pro/Max only; each window may be absent)
 limit=""
-[ -n "$five" ]  && limit="$(c "$MUTED" '5h ')$(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
+if [ -n "$five" ]; then
+  limit="$(c "$MUTED" '5h ')$(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
+  # append the local clock time the 5h window resets at
+  if [ -n "$five_reset" ]; then
+    rt=$(date -r "${five_reset%.*}" +%H:%M 2>/dev/null)
+    [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
+  fi
+fi
 if [ -n "$seven" ]; then
   [ -n "$limit" ] && limit="$limit "
   limit="${limit}$(c "$MUTED" '7d ')$(c "$(pct_color "$(round "$seven")")" "$(round "$seven")%")"
