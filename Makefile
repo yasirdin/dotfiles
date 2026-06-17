@@ -42,7 +42,7 @@ BACKUP_DIR := ~/.dotfiles_backup/$(shell date +%Y%m%d_%H%M%S)
 backup:
 	@echo "Backing up existing configs to $(BACKUP_DIR)..."
 	@mkdir -p $(BACKUP_DIR)
-	@for f in ~/.zshrc ~/.tmux.conf ~/.amethyst.yml ~/.config/alacritty ~/.config/nvim; do \
+	@for f in ~/.zshrc ~/.tmux.conf ~/.amethyst.yml ~/.config/alacritty ~/.config/nvim ~/.claude/statusline.sh; do \
 		if [ -e "$$f" ] && [ ! -L "$$f" ]; then \
 			cp -r "$$f" $(BACKUP_DIR)/ 2>/dev/null && echo "  Backed up $$f"; \
 		fi; \
@@ -56,6 +56,8 @@ symlink: backup
 	ln -sfn $(shell pwd)/alacritty ~/.config/alacritty
 	ln -sfn $(shell pwd)/nvim ~/.config/nvim
 	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
+	@mkdir -p ~/.claude
+	ln -sf $(shell pwd)/claude/statusline.sh ~/.claude/statusline.sh
 	@echo "✓ Symlinks created"
 
 install-tmux:
