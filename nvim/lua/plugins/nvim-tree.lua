@@ -8,7 +8,7 @@ return {
         auto_reload_on_write = true,
         open_on_tab          = false,
         hijack_cursor        = true,
-        update_cwd           = false,
+        sync_root_with_cwd   = false,
         renderer = {
           highlight_opened_files = 'all',
           -- Git status is shown via emoji glyphs (see icons.glyphs.git below)
@@ -46,12 +46,8 @@ return {
         },
         update_focused_file = {
           enable      = true,
-          update_cwd  = true,
+          update_root = true,
           ignore_list = {}
-        },
-        system_open = {
-          cmd  = nil,
-          args = {}
         },
         filters = {
           dotfiles = false,
