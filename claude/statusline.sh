@@ -87,10 +87,16 @@ fi
 limit=""
 if [ -n "$five" ]; then
   limit="$(c "$MUTED" '5h')"
-  # the local clock time the 5h window resets at, in brackets next to "5h"
+  # the local clock time the 5h window resets at, in brackets next to "5h".
+  # Only show it if still in the future — a past time means Claude Code's
+  # rate-limit data is stale (window rolled over while idle), so suppress it
+  # until the next API response refreshes it rather than show a misleading time.
   if [ -n "$five_reset" ]; then
-    rt=$(date -r "${five_reset%.*}" +%H:%M 2>/dev/null)
-    [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
+    epoch=${five_reset%.*}
+    if [ "$epoch" -gt "$(date +%s)" ] 2>/dev/null; then
+      rt=$(date -r "$epoch" +%H:%M 2>/dev/null)
+      [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
+    fi
   fi
   limit="$limit $(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
 fi
