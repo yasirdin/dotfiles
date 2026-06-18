@@ -36,6 +36,7 @@ return {
       require('mason-lspconfig').setup({
         ensure_installed = {
           'pyright',
+          'ruff',
           'lua_ls',
           'bashls',
         },
@@ -44,8 +45,22 @@ return {
 
       -- LSP server configurations (Neovim 0.11+ API)
 
-      -- Python
+      -- Python type-checking
       vim.lsp.config('pyright', {})
+
+      -- Python linting via ruff's native LSP. ruff reads each project's
+      -- [tool.ruff] from pyproject.toml automatically, so per-repo lint rules
+      -- surface inline while editing with no rule duplication here. Let pyright
+      -- own hover/definitions.
+      vim.lsp.config('ruff', {})
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if client and client.name == 'ruff' then
+            client.server_capabilities.hoverProvider = false
+          end
+        end,
+      })
 
       -- Lua (for Neovim config)
       vim.lsp.config('lua_ls', {
@@ -63,6 +78,7 @@ return {
 
       -- Enable all configured servers
       vim.lsp.enable('pyright')
+      vim.lsp.enable('ruff')
       vim.lsp.enable('lua_ls')
       vim.lsp.enable('bashls')
     end,

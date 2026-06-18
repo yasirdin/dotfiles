@@ -190,6 +190,7 @@ install-python-linters:
 	@pipx ensurepath >/dev/null 2>&1 || true
 	pipx install mypy || true
 	pipx install flake8 || true
+	pipx install ruff || true
 	@echo "✓ Python linters installed"
 
 install-python-lsps:
