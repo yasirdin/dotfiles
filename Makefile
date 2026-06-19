@@ -229,7 +229,8 @@ verify:
 	@nvim --headless -c 'lua print("lazy.nvim: " .. (pcall(require, "lazy") and "OK" or "FAIL"))' -c 'qa'
 	@nvim --headless -c 'lua print("telescope: " .. (pcall(require, "telescope") and "OK" or "FAIL"))' -c 'qa'
 	@nvim --headless -c 'lua print("Navigator: " .. (pcall(require, "Navigator") and "OK" or "FAIL"))' -c 'qa'
-	@nvim --headless -c 'lua print("nvim-tree: " .. (pcall(require, "nvim-tree") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("mini.files: " .. (pcall(require, "mini.files") and "OK" or "FAIL"))' -c 'qa'
+	@nvim --headless -c 'lua print("neo-tree: " .. (pcall(require, "neo-tree") and "OK" or "FAIL"))' -c 'qa'
 	@nvim --headless -c 'lua print("nvim-cmp: " .. (pcall(require, "cmp") and "OK" or "FAIL"))' -c 'qa'
 	@tmux -V
 	@test -d ~/.tmux/plugins/vim-tmux-navigator && echo "✓ vim-tmux-navigator: OK" || echo "✗ vim-tmux-navigator: MISSING"
