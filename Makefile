@@ -234,4 +234,6 @@ verify:
 	@nvim --headless -c 'lua print("nvim-cmp: " .. (pcall(require, "cmp") and "OK" or "FAIL"))' -c 'qa'
 	@tmux -V
 	@test -d ~/.tmux/plugins/vim-tmux-navigator && echo "✓ vim-tmux-navigator: OK" || echo "✗ vim-tmux-navigator: MISSING"
+	@test -d ~/.tmux/plugins/tmux-resurrect && echo "✓ tmux-resurrect: OK" || echo "✗ tmux-resurrect: MISSING"
+	@test -d ~/.tmux/plugins/tmux-continuum && echo "✓ tmux-continuum: OK" || echo "✗ tmux-continuum: MISSING"
 	@echo "✓ Verification complete"
