@@ -65,17 +65,15 @@ symlink: backup
 	fi
 	@echo "✓ Symlinks created"
 
-# Enable the tracked theme + status line in Claude Code's settings.json. That
-# file isn't tracked (it holds account-specific hooks/plugins/tokens), so we
-# merge in just these two keys non-destructively with jq, leaving everything
-# else untouched. The theme file and statusline.sh are symlinked by `symlink`.
+# settings.json holds account-specific secrets, so it isn't tracked; we merge
+# only the sharable keys from settings.partial.json into it.
 configure-claude:
-	@echo "Configuring Claude Code (theme + status line)..."
+	@echo "Configuring Claude Code (merging tracked prefs)..."
 	@brew list jq &>/dev/null || brew install jq || true
 	@mkdir -p ~/.claude
 	@[ -s ~/.claude/settings.json ] || echo '{}' > ~/.claude/settings.json
-	@tmp=$$(mktemp) && jq '.theme = "custom:solarized-blend" | .statusLine = {"type":"command","command":"~/.claude/statusline.sh","padding":0,"refreshInterval":5}' ~/.claude/settings.json > "$$tmp" && mv "$$tmp" ~/.claude/settings.json
-	@echo "✓ Claude theme + status line configured"
+	@tmp=$$(mktemp) && jq -s '.[0] * .[1]' ~/.claude/settings.json $(shell pwd)/claude/settings.partial.json > "$$tmp" && mv "$$tmp" ~/.claude/settings.json
+	@echo "✓ Claude prefs merged from claude/settings.partial.json"
 
 install-tmux:
 	@echo "Installing tmux and TPM..."

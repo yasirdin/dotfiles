@@ -33,17 +33,9 @@ hooks, plugins, and tokens), so `make` reproduces the Claude setup in two steps:
 
 - `make symlink` links `statusline.sh` and `themes/solarized-blend.json` into
   `~/.claude/`.
-- `make configure-claude` merges just the `theme` and `statusLine` keys into
-  `~/.claude/settings.json` with jq, non-destructively (all other keys kept).
+- `make configure-claude` merges the tracked prefs from
+  `claude/settings.partial.json` into `~/.claude/settings.json` with jq
+  (`.[0] * .[1]`), non-destructively (all other keys kept).
 
-Both run as part of `make all`. The keys it sets:
-
-```json
-"theme": "custom:solarized-blend",
-"statusLine": {
-  "type": "command",
-  "command": "~/.claude/statusline.sh",
-  "padding": 0,
-  "refreshInterval": 5
-}
-```
+Both run as part of `make all`. To track another preference, add its key to
+`claude/settings.partial.json`.
