@@ -3,7 +3,11 @@ return {
   cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory', 'DiffviewToggleFiles' },
   keys = {
     { '<leader>vv', '<cmd>DiffviewOpen<CR>', desc = 'Diffview: review working tree' },
-    { '<leader>vm', '<cmd>DiffviewOpen origin/main...HEAD<CR>', desc = 'Diffview: review branch vs main' },
+    { '<leader>vm', function()
+        local head = vim.fn.systemlist('git symbolic-ref --short refs/remotes/origin/HEAD')[1] or ''
+        local base = head:match('^origin/%S+') and head or 'origin/main'
+        vim.cmd('DiffviewOpen ' .. base .. '...HEAD')
+      end, desc = 'Diffview: review branch vs default' },
     { '<leader>vc', '<cmd>DiffviewClose<CR>', desc = 'Diffview: close' },
     { '<leader>vh', '<cmd>DiffviewFileHistory %<CR>', desc = 'Diffview: history of current file' },
     { '<leader>vH', '<cmd>DiffviewFileHistory<CR>', desc = 'Diffview: history of whole repo' },
