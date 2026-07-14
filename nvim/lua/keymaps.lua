@@ -9,10 +9,10 @@ vim.keymap.set('n', '<leader>e', function()
 end, { noremap = true, silent = true, desc = 'Toggle file explorer' })
 
 -- Diagnostics
-map('n', '<leader>d', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, { silent = true, desc = 'Show diagnostic' })
 map('n', '[d', '<cmd>lua vim.diagnostic.jump({ count = -1 })<CR>', opts)
 map('n', ']d', '<cmd>lua vim.diagnostic.jump({ count = 1 })<CR>', opts)
-map('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { silent = true, desc = 'Diagnostics to loclist' })
 
 -- LSP with Telescope
 map('n', 'gr', '<cmd>Telescope lsp_references<CR>', opts)
