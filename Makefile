@@ -66,13 +66,14 @@ symlink: backup
 	@echo "✓ Symlinks created"
 
 # settings.json holds account-specific secrets, so it isn't tracked; we merge
-# only the sharable keys from settings.partial.json into it.
+# only the sharable keys from settings.partial.json into it. See
+# claude/merge-settings.jq for how hooks are preserved rather than replaced.
 configure-claude:
 	@echo "Configuring Claude Code (merging tracked prefs)..."
 	@brew list jq &>/dev/null || brew install jq || true
 	@mkdir -p ~/.claude
 	@[ -s ~/.claude/settings.json ] || echo '{}' > ~/.claude/settings.json
-	@tmp=$$(mktemp) && jq -s '.[0] * .[1]' ~/.claude/settings.json $(shell pwd)/claude/settings.partial.json > "$$tmp" && mv "$$tmp" ~/.claude/settings.json
+	@tmp=$$(mktemp) && jq -s -f $(shell pwd)/claude/merge-settings.jq ~/.claude/settings.json $(shell pwd)/claude/settings.partial.json > "$$tmp" && mv "$$tmp" ~/.claude/settings.json
 	@echo "✓ Claude prefs merged from claude/settings.partial.json"
 
 install-tmux:
