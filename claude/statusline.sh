@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Claude Code status line. Receives session JSON on stdin, prints one line.
-# Layout:  Opus high · main* · +156/-23 · ctx 42% · 5h (14:30) 23% 7d 41% · $0.34
+# Layout:  Opus high · main* · +156/-23 · ctx 42% · all 5h (14:30) 23% 7d 41% · fable 7d (Tue) 21% · $0.34
 set -o pipefail
 
 input=$(cat)
@@ -38,6 +38,47 @@ pct_color() {
   else printf '%s' "$GRN"; fi
 }
 round() { printf '%.0f' "$1" 2>/dev/null || printf '0'; }
+
+# Prints when a future reset epoch lands (clock within 24h, else weekday);
+# prints nothing for a past epoch, which only ever means stale limit data.
+upcoming_reset_label() {
+  local reset=${1%%.*} now; now=$(date +%s)
+  [ -n "$reset" ] && [ "$reset" -gt "$now" ] 2>/dev/null || return 0
+  if [ $((reset - now)) -lt 86400 ]; then date -r "$reset" +%H:%M 2>/dev/null
+  else date -r "$reset" +%a 2>/dev/null; fi
+}
+
+# The stdin payload only carries the all-model windows; the usage endpoint
+# also reports model-scoped weekly limits. Prints "percent epoch" for Fable.
+fable_weekly_limit() {
+  local token
+  token=$(security find-generic-password -s "Claude Code-credentials" -w 2>/dev/null |
+    jq -r '.claudeAiOauth.accessToken // empty' 2>/dev/null)
+  [ -n "$token" ] || return 0
+  printf 'header = "Authorization: Bearer %s"\n' "$token" |
+    curl -s --max-time 2 -K - -H 'anthropic-beta: oauth-2025-04-20' \
+      https://api.anthropic.com/api/oauth/usage 2>/dev/null |
+    jq -r '.limits[]?
+      | select(.scope.model.display_name == "Fable" and .percent != null)
+      | "\(.percent) \(.resets_at // "" | sub("\\.[0-9]+"; "")
+                       | sub("\\+00:00$"; "Z") | try fromdateiso8601 catch "")"' \
+      2>/dev/null | head -n1
+}
+
+# 60s cache; a failed fetch keeps the last known value rather than flickering.
+fable_weekly_cached() {
+  local cache="$HOME/.claude/cache/fable-weekly" now fetched_at value fresh
+  now=$(date +%s); fetched_at=0; value=""
+  [ -r "$cache" ] && read -r fetched_at value < "$cache" 2>/dev/null
+  case $fetched_at in (*[!0-9]*|'') fetched_at=0;; esac
+  if [ $((now - fetched_at)) -ge 60 ]; then
+    fresh=$(fable_weekly_limit)
+    [ -n "$fresh" ] && value=$fresh
+    mkdir -p "${cache%/*}"
+    printf '%s %s' "$now" "$value" > "$cache"
+  fi
+  printf '%s' "$value"
+}
 
 segments=()
 
@@ -86,18 +127,9 @@ fi
 # 4) Usage limits (Pro/Max only; each window may be absent)
 limit=""
 if [ -n "$five" ]; then
-  limit="$(c "$MUTED" '5h')"
-  # the local clock time the 5h window resets at, in brackets next to "5h".
-  # Only show it if still in the future — a past time means Claude Code's
-  # rate-limit data is stale (window rolled over while idle), so suppress it
-  # until the next API response refreshes it rather than show a misleading time.
-  if [ -n "$five_reset" ]; then
-    epoch=${five_reset%.*}
-    if [ "$epoch" -gt "$(date +%s)" ] 2>/dev/null; then
-      rt=$(date -r "$epoch" +%H:%M 2>/dev/null)
-      [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
-    fi
-  fi
+  limit="$(c "$MUTED" 'all 5h')"
+  rt=$(upcoming_reset_label "$five_reset")
+  [ -n "$rt" ] && limit="$limit$(c "$MUTED" " ($rt)")"
   limit="$limit $(c "$(pct_color "$(round "$five")")" "$(round "$five")%")"
 fi
 if [ -n "$seven" ]; then
@@ -105,6 +137,16 @@ if [ -n "$seven" ]; then
   limit="${limit}$(c "$MUTED" '7d ')$(c "$(pct_color "$(round "$seven")")" "$(round "$seven")%")"
 fi
 [ -n "$limit" ] && segments+=("$limit")
+
+# 4b) Fable's model-scoped weekly limit
+fw=$(fable_weekly_cached)
+fable=${fw%% *}; fable_reset=${fw#* }
+if [ -n "$fable" ]; then
+  fl="$(c "$MUTED" 'fable 7d')"
+  rt=$(upcoming_reset_label "$fable_reset")
+  [ -n "$rt" ] && fl="$fl$(c "$MUTED" " ($rt)")"
+  segments+=("$fl $(c "$(pct_color "$fable")" "$(round "$fable")%")")
+fi
 
 # 5) Session cost
 segments+=("$(c "$MUTED" "\$$(printf '%.2f' "$cost")")")
