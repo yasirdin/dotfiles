@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# tmux status-right segment: host CPU and memory usage, colored with the same
-# Solarized severity thresholds as the Claude Code status line.
+# tmux status-right segment: CPU and memory gauges, Solarized severity colors.
+# Both are scaled so 100% marks where performance starts to degrade.
 
 GRN='#859900'; YEL='#b58900'; RED='#dc322f'; MUTED='#586e75'
 
@@ -11,10 +11,20 @@ pct_color() {
   else printf '%s' "$GRN"; fi
 }
 
-cpu=$(ps -A -o %cpu= | awk -v cores="$(sysctl -n hw.ncpu)" \
-  '{sum += $1} END { if (cores > 0) printf "%.0f", sum / cores }')
-mem=$(memory_pressure 2>/dev/null | awk -F': *' \
-  '/free percentage/ { gsub("%", "", $2); printf "%.0f", 100 - $2 }')
+# 1-minute load average over core count; past 100% threads are queuing.
+cpu_saturation_pct() {
+  sysctl -n vm.loadavg | awk -v cores="$(sysctl -n hw.ncpu)" \
+    '{ if (cores > 0) printf "%.0f", 100 * $2 / cores }'
+}
+
+# Pressure, not occupancy: at 100% the reclaimable pool is gone, swap begins.
+memory_pressure_pct() {
+  memory_pressure 2>/dev/null | awk -F': *' \
+    '/free percentage/ { gsub("%", "", $2); printf "%.0f", 100 - $2 }'
+}
+
+cpu=$(cpu_saturation_pct)
+mem=$(memory_pressure_pct)
 
 out=""
 [ -n "$cpu" ] && out="#[fg=$MUTED]cpu #[fg=$(pct_color "$cpu")]${cpu}%"
