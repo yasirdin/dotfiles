@@ -65,6 +65,48 @@ fable_weekly_limit() {
       2>/dev/null | head -n1
 }
 
+# Local footprints, one ps pass: this session's claude process tree, and every
+# process under any claude session on the machine (tool commands, MCP servers,
+# background hosts). Prints "<cpu%> <rss-kb> <all-cpu%> <all-rss-kb>".
+claude_process_usage() {
+  local pid=$$ root=""
+  while [ "$pid" -gt 1 ] 2>/dev/null; do
+    case $(ps -o comm= -p "$pid" 2>/dev/null) in (*claude*|*node*) root=$pid;; esac
+    pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+    [ -n "$pid" ] || break
+  done
+  ps -axo pid=,ppid=,rss=,%cpu=,comm= 2>/dev/null | awk -v root="${root:-0}" '
+    { parent[$1] = $2; rss[$1] = $3; cpu[$1] = $4; is_claude[$1] = ($5 ~ /claude/) }
+    END {
+      for (p in parent) {
+        in_session = in_fleet = 0
+        q = p
+        while (1) {
+          if (q == root)      in_session = 1
+          if (is_claude[q])   in_fleet = 1
+          if (!(q in parent) || parent[q] == q) break
+          q = parent[q]
+        }
+        if (in_session) { s_kb += rss[p]; s_cpu += cpu[p] }
+        if (in_fleet)   { a_kb += rss[p]; a_cpu += cpu[p] }
+      }
+      if (a_kb > 0) printf "%.0f %d %.0f %d", s_cpu, s_kb, a_cpu, a_kb
+    }'
+}
+
+fmt_kb() {
+  if [ "$1" -ge 1048576 ] 2>/dev/null; then
+    awk -v kb="$1" 'BEGIN { printf "%.1fG", kb / 1048576 }'
+  else
+    printf '%sM' "$(( $1 / 1024 ))"
+  fi
+}
+
+share_of_total_ram() {
+  sysctl -n hw.memsize 2>/dev/null | awk -v kb="$1" \
+    '{ if ($1 > 0) printf " (%.0f%%)", 100 * kb * 1024 / $1 }'
+}
+
 # 60s cache; a failed fetch keeps the last known value rather than flickering.
 fable_weekly_cached() {
   local cache="$HOME/.claude/cache/fable-weekly" now fetched_at value fresh
@@ -74,8 +116,8 @@ fable_weekly_cached() {
   if [ $((now - fetched_at)) -ge 60 ]; then
     fresh=$(fable_weekly_limit)
     [ -n "$fresh" ] && value=$fresh
-    mkdir -p "${cache%/*}"
-    printf '%s %s' "$now" "$value" > "$cache"
+    mkdir -p "${cache%/*}" 2>/dev/null
+    printf '%s %s' "$now" "$value" 2>/dev/null > "$cache"
   fi
   printf '%s' "$value"
 }
@@ -150,6 +192,18 @@ fi
 
 # 5) Session cost
 segments+=("$(c "$MUTED" "\$$(printf '%.2f' "$cost")")")
+
+# 6) Claude footprints, muted: no severity color because sessions have no
+# degradation point of their own (host health lives in the tmux bar).
+usage=$(claude_process_usage)
+if [ -n "$usage" ]; then
+  set -- $usage
+  scpu=$1; skb=$2; acpu=$3; akb=$4
+  [ "${skb:-0}" -gt 0 ] 2>/dev/null &&
+    segments+=("$(c "$MUTED" "cpu ${scpu}% mem $(fmt_kb "$skb")$(share_of_total_ram "$skb")")")
+  [ "${akb:-0}" -gt 0 ] 2>/dev/null &&
+    segments+=("$(c "$MUTED" "all cpu ${acpu}% mem $(fmt_kb "$akb")$(share_of_total_ram "$akb")")")
+fi
 
 # Join with dim separators.
 out=""
