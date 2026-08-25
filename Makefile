@@ -58,6 +58,8 @@ symlink: backup
 	ln -sf $(shell pwd)/.amethyst.yml ~/.amethyst.yml
 	@mkdir -p ~/.claude ~/.claude/themes
 	ln -sf $(shell pwd)/claude/statusline.sh ~/.claude/statusline.sh
+	@mkdir -p ~/.tmux
+	ln -sf $(shell pwd)/tmux/status-right.sh ~/.tmux/status-right.sh
 	ln -sf $(shell pwd)/claude/themes/solarized-blend.json ~/.claude/themes/solarized-blend.json
 	@if [ ! -f ~/.zshrc.local ]; then \
 		cp $(shell pwd)/.zshrc.local.example ~/.zshrc.local; \
