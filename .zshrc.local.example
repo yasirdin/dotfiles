@@ -2,16 +2,17 @@
 # values. ~/.zshrc.local is gitignored and must never be committed.
 #   cp .zshrc.local.example ~/.zshrc.local
 
+# GitLab. The package-index password below reuses this token, so there is one
+# secret to rotate.
+export GITLAB_USERNAME=your-gitlab-username
+export GITLAB_TOKEN=glpat-xxxxxxxxxxxxxxxxxxxx
+
 # Private PyPI. uv reads UV_INDEX_<NAME>_* where <NAME> is the index name
 # from the project's pyproject.toml, uppercased.
 export PYPI_USERNAME='your.username'
 export PYPI_PASSWORD='your-pypi-token'
 export UV_INDEX_YOURINDEX_USERNAME="$PYPI_USERNAME"
-export UV_INDEX_YOURINDEX_PASSWORD="$PYPI_PASSWORD"
-
-# GitLab
-export GITLAB_USERNAME='your.username'
-export GITLAB_TOKEN='your-gitlab-token'
+export UV_INDEX_YOURINDEX_PASSWORD="$GITLAB_TOKEN"
 
 # Snowflake
 export SNOWFLAKE_USER='YOURUSER'
